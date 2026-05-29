@@ -2,7 +2,7 @@
 
 A full-stack web app for planning holidays and building AI-generated travel itineraries. Register an account, create trips with destination, dates, hotel, and preferences, then get a detailed day-by-day itinerary written by GPT-4o — all stored to your account and editable at any time.
 
-**Live site:** https://your-app.vercel.app
+**Live site:** https://holiday-app-rouge.vercel.app/
 
 ---
 

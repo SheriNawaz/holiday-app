@@ -26,6 +26,13 @@ This project uses [`next/font`](https://nextjs.org/docs/app/building-your-applic
 2. Set `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` from your Supabase project.
 3. Run `npm run dev` and visit `/signup` or `/login`.
 
+## Trip Creation and AI Itineraries
+
+- Visit `/trips/new` to launch the guided trip creation wizard.
+- The app stores trips locally and attempts to save to Supabase if the `trips` table exists.
+- To enable AI-based itinerary generation, set `OPENAI_API_KEY` in `.env.local`.
+- The itinerary endpoint will fallback to a smart local itinerary if OpenAI is not configured.
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:

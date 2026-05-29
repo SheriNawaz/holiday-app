@@ -350,3 +350,453 @@ button.nav-link {
     padding: 2rem;
   }
 }
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.dashboard-shell,
+.trip-detail-shell,
+.wizard-shell {
+  padding: 3rem 2rem 4rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.dashboard-header,
+.wizard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.dashboard-header .eyebrow,
+.wizard-header .eyebrow {
+  color: rgba(255, 255, 255, 0.75);
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: 0.8rem;
+}
+
+.step-pill {
+  align-self: center;
+  padding: 0.95rem 1.2rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  color: #f5f7ff;
+  font-weight: 700;
+}
+
+.wizard-card,
+.trip-card,
+.detail-summary-card,
+.alert-card,
+.empty-state-card,
+.trip-grid-card,
+.image-card,
+.recommendation-card,
+.notes-card,
+.itinerary-day-card {
+  background: rgba(10, 14, 34, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.18);
+  border-radius: 28px;
+}
+
+.wizard-card,
+.trip-card,
+.detail-summary-card,
+.image-card,
+.recommendation-card,
+.notes-card,
+.itinerary-day-card {
+  padding: 1.75rem;
+}
+
+.wizard-card {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.wizard-step {
+  display: grid;
+  gap: 1.2rem;
+}
+
+.wizard-step h2,
+.trip-detail-header h1,
+.trip-card__destination,
+.review-card strong {
+  color: #ffffff;
+}
+
+.wizard-step label,
+.review-card p,
+.preference-chip,
+.trip-card__hotel,
+.trip-card__dates,
+.trip-card__meta,
+.itinerary-day-card p,
+.details-card p {
+  color: rgba(245, 247, 255, 0.82);
+}
+
+.wizard-step label {
+  display: grid;
+  gap: 0.6rem;
+  font-weight: 500;
+}
+
+.wizard-step input,
+.wizard-step textarea,
+.itinerary-section-card input,
+.itinerary-section-card textarea {
+  width: 100%;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 18px;
+  padding: 1rem 1.1rem;
+  background: rgba(255, 255, 255, 0.05);
+  color: #f5f7ff;
+  outline: none;
+}
+
+.wizard-step textarea,
+.itinerary-section-card textarea {
+  resize: vertical;
+}
+
+.hotel-suggestions {
+  display: grid;
+  gap: 0.85rem;
+  margin-bottom: 1rem;
+}
+
+.hotel-suggestion {
+  display: grid;
+  align-items: flex-start;
+  gap: 0.35rem;
+  padding: 1rem 1.1rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.04);
+  color: #f5f7ff;
+  text-align: left;
+  cursor: pointer;
+}
+
+.preferences-grid,
+.style-grid,
+.review-grid,
+.section-grid,
+.trips-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.preferences-grid {
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+}
+
+.preference-chip,
+.style-card {
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 20px;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  color: #f5f7ff;
+  cursor: pointer;
+  transition: transform 180ms ease, border-color 180ms ease, background-color 180ms ease;
+}
+
+.preference-chip:hover,
+.style-card:hover,
+.hotel-suggestion:hover,
+button.button--secondary:hover,
+button.button--primary:hover {
+  transform: translateY(-1px);
+}
+
+.preference-chip.selected,
+.style-card input:checked + div,
+.style-card input:checked {
+  border-color: var(--accent);
+  background: rgba(255, 216, 168, 0.12);
+}
+
+.style-card {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 1rem;
+  align-items: center;
+}
+
+.style-card input {
+  accent-color: #ffb86c;
+}
+
+.review-grid {
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.review-card {
+  padding: 1rem;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.wizard-actions,
+.trip-card-actions,
+.itinerary-day-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.85rem;
+  margin-top: 1rem;
+}
+
+.wizard-status,
+.alert-card {
+  padding: 1rem 1.2rem;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.07);
+  color: #ffffff;
+}
+
+.trip-card-actions {
+  justify-content: flex-end;
+}
+
+.trips-grid {
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+}
+
+.trip-grid-card {
+  display: grid;
+  gap: 1rem;
+}
+
+.trip-full-card {
+  display: grid;
+  gap: 1rem;
+}
+
+.trip-itinerary-preview {
+  display: grid;
+  gap: 1rem;
+  padding: 1.25rem;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.trip-itinerary-preview h3 {
+  margin: 0 0 0.8rem;
+  color: #ffffff;
+  font-size: 1rem;
+}
+
+.itinerary-day-preview {
+  display: grid;
+  gap: 0.6rem;
+}
+
+.itinerary-day-preview h4 {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.88);
+  font-size: 0.95rem;
+}
+
+.itinerary-sections-preview {
+  display: grid;
+  gap: 0.4rem;
+}
+
+.section-preview {
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  gap: 0.8rem;
+  padding: 0.6rem 0;
+  font-size: 0.9rem;
+  color: rgba(245, 247, 255, 0.82);
+}
+
+.section-time {
+  font-weight: 600;
+  color: rgba(255, 216, 168, 0.8);
+}
+
+.section-activity {
+  line-height: 1.4;
+}
+
+.trip-card__header {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.trip-card__destination,
+.trip-card__style {
+  margin: 0;
+}
+
+.trip-card__destination {
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.trip-card__dates,
+.trip-card__hotel,
+.trip-card__notes,
+.trip-card__meta {
+  margin: 0.5rem 0 0;
+}
+
+.trip-card__meta {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  color: rgba(245, 247, 255, 0.72);
+}
+
+.empty-state-card,
+.alert-card {
+  padding: 1.8rem;
+}
+
+.empty-state-card h2 {
+  margin-top: 0;
+}
+
+.page-shell,
+.dashboard-shell,
+.trip-detail-shell {
+  min-height: 100vh;
+}
+
+.trip-detail-shell {
+  display: grid;
+  grid-template-columns: 1.75fr 1fr;
+  gap: 2rem;
+}
+
+.trip-detail-main {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.trip-detail-header {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.detail-summary-card,
+.recommendation-card,
+.notes-card {
+  display: grid;
+  gap: 1rem;
+}
+
+.image-card {
+  position: relative;
+  overflow: hidden;
+  min-height: 260px;
+}
+
+.image-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.image-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(5, 8, 22, 0.22), rgba(5, 8, 22, 0.88));
+  color: #ffffff;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.image-overlay h2,
+.image-overlay p {
+  margin: 0;
+}
+
+.itinerary-editor {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.editor-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.itinerary-day-card {
+  display: grid;
+  gap: 1rem;
+}
+
+.itinerary-day-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.itinerary-day-actions {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, max-content));
+  gap: 0.75rem;
+}
+
+.section-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.itinerary-section-card {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.notes-card ul,
+.recommendation-card ul {
+  margin: 0;
+  padding-left: 1.2rem;
+  color: rgba(245, 247, 255, 0.82);
+}
+
+@media (max-width: 1000px) {
+  .trip-detail-shell {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .dashboard-shell,
+  .wizard-shell,
+  .trip-detail-shell {
+    padding: 2rem 1rem 3rem;
+  }
+
+  .dashboard-header,
+  .wizard-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .itinerary-day-actions,
+  .wizard-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}

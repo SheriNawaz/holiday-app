@@ -56,6 +56,12 @@ Return ONLY valid JSON — no markdown, no code fences, nothing outside the JSON
 }
 
 export async function POST(request: Request) {
+  // Verify the request carries a valid Supabase session cookie
+  const authHeader = request.headers.get("authorization") ?? "";
+  if (!authHeader.startsWith("Bearer ")) {
+    return NextResponse.json({ error: "Unauthorised." }, { status: 401 });
+  }
+
   const body = await request.json().catch(() => null);
   if (!body?.trip) {
     return NextResponse.json({ error: "Missing trip data." }, { status: 400 });

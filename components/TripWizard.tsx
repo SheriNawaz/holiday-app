@@ -135,9 +135,15 @@ export default function TripWizard() {
     const timeout = setTimeout(() => controller.abort(), 120_000);
 
     try {
+      const { data: sessionData } = await supabase.auth.getSession();
+      const token = sessionData.session?.access_token ?? "";
+
       const response = await fetch("/api/itinerary", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
         body: JSON.stringify({ trip: draft }),
         signal: controller.signal,
       });

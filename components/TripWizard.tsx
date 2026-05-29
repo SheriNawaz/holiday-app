@@ -37,34 +37,6 @@ const defaultDraft: TripDraft = {
   notes: "",
 };
 
-const createDefaultItinerary = (draft: TripDraft): ItineraryDay[] => {
-  const start = new Date(draft.startDate);
-  const end = new Date(draft.endDate);
-  const days = Math.max(1, Math.min(30, Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24) + 1)));
-
-  return Array.from({ length: days }).map((_, index) => ({
-    id: `day-${index + 1}`,
-    dayNumber: index + 1,
-    title: `Day ${index + 1}`,
-    sections: [
-      {
-        id: `day-${index + 1}-morning`,
-        time: "Morning",
-        activity: "Explore the destination and settle into the hotel.",
-      },
-      {
-        id: `day-${index + 1}-afternoon`,
-        time: "Afternoon",
-        activity: "Try a local restaurant or visit a nearby attraction.",
-      },
-      {
-        id: `day-${index + 1}-evening`,
-        time: "Evening",
-        activity: "Choose an activity that matches your travel preferences.",
-      },
-    ],
-  }));
-};
 
 function ensureLocalTrips() {
   if (typeof window === "undefined") return [];
@@ -157,28 +129,34 @@ export default function TripWizard() {
 
   const generateItinerary = async () => {
     setIsGenerating(true);
-    setStatus(null);
+    setStatus("Generating your itinerary with AI — this usually takes 20–60 seconds…");
+
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 120_000);
+
     try {
       const response = await fetch("/api/itinerary", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ trip: draft }),
+        signal: controller.signal,
       });
       const json = await response.json();
-      if (json.itinerary) {
+      if (json.itinerary && Array.isArray(json.itinerary)) {
         setItinerary(json.itinerary);
-        setStatus("Itinerary generated. Review and save your trip.");
+        setStatus("Itinerary generated. Review the plan below then save your trip.");
       } else {
-        setItinerary(createDefaultItinerary(draft));
-        setStatus("Could not generate AI itinerary, using a smart fallback.");
+        setStatus(`Error: ${json.error ?? "The AI returned an unexpected response. Please try again."}`);
       }
-    } catch (error) {
-      console.error(error);
-      setItinerary(createDefaultItinerary(draft));
-      setStatus("Unable to reach itinerary generator. Saved a draft itinerary instead.");
+    } catch (err: any) {
+      if (err?.name === "AbortError") {
+        setStatus("Error: The request timed out. Please try again.");
+      } else {
+        setStatus("Error: Could not connect to the itinerary service. Please check your connection and try again.");
+      }
     } finally {
+      clearTimeout(timeout);
       setIsGenerating(false);
-      setStep(7);
     }
   };
 
@@ -420,7 +398,7 @@ export default function TripWizard() {
 
             <div className="wizard-actions">
               <button type="button" className="button button--primary" onClick={generateItinerary} disabled={isGenerating}>
-                {isGenerating ? "Generating itinerary..." : "Generate itinerary"}
+                {isGenerating ? "⏳ Generating — please wait…" : "Generate itinerary"}
               </button>
               {itinerary.length > 0 && (
                 <button type="button" className="button button--secondary" onClick={saveTrip} disabled={isSaving}>
@@ -431,7 +409,11 @@ export default function TripWizard() {
           </div>
         )}
 
-        {status ? <p className="wizard-status">{status}</p> : null}
+        {status && (
+          <p className={`wizard-status${status.startsWith("Error") ? " wizard-status--error" : ""}`}>
+            {status}
+          </p>
+        )}
       </div>
 
       <div className="wizard-footer">

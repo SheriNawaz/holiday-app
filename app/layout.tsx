@@ -16,7 +16,8 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Holiday Planner",
-  description: "Plan your holidays/vacations with ease. Create itineraries ",
+  description: "Plan smarter. Travel better. Build AI-powered day-by-day itineraries for any destination in the world.",
+  icons: { icon: "/icon.png" },
 };
 
 export default function RootLayout({

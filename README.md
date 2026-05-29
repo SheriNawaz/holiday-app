@@ -1,49 +1,191 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ✈️ Holiday Planner
 
-## Getting Started
+A full-stack web app for planning holidays and building AI-generated travel itineraries. Register an account, create trips with destination, dates, hotel, and preferences, then get a detailed day-by-day itinerary written by GPT-4o — all stored to your account and editable at any time.
 
-First, run the development server:
+**Live site:** https://your-app.vercel.app
+
+---
+
+## Features
+
+- Register and log in with a secure Supabase account
+- Create trips with destination, travel dates, accommodation, preferences, and trip style (Budget / Standard / Luxury)
+- Generate rich, specific AI itineraries via OpenAI GPT-4o — real venue names, insider tips, themed day titles
+- View each trip as a clean card with a destination photo
+- Expand any card to preview the full itinerary inline
+- Open a trip to see a beautiful timeline view of every day
+- Edit the itinerary in place — add/remove days and activities, reorder days
+- Duplicate or delete trips
+- Trip data synced to Supabase with localStorage fallback
+- Light and dark mode with persistent preference
+- Destination photos sourced automatically from Wikipedia for any city in the world
+
+---
+
+## Tech Stack
+
+**Frontend**
+
+- Next.js 16 (App Router, Turbopack)
+- React 19 + TypeScript
+- Tailwind CSS v4
+- Supabase Auth (`@supabase/supabase-js`)
+
+**Backend / API**
+
+- Next.js API Routes (serverless)
+- OpenAI API (`gpt-4o-mini`) for itinerary generation
+- Wikipedia API for destination images (no key required)
+- Supabase (PostgreSQL) for data persistence
+
+---
+
+## Project Structure
+
+```
+holiday-app/
+├── app/
+│   ├── api/
+│   │   ├── itinerary/         # POST — AI itinerary generation
+│   │   └── destination-image/ # GET  — Wikipedia city photo lookup
+│   ├── login/                 # Login page
+│   ├── signup/                # Sign-up page
+│   ├── reset-password/        # Password reset page
+│   ├── trips/
+│   │   ├── page.tsx           # Trip list dashboard
+│   │   ├── new/               # Trip creation wizard
+│   │   └── [tripId]/          # Trip detail + itinerary view
+│   ├── globals.css
+│   ├── layout.tsx
+│   └── page.tsx               # Home / landing page
+├── components/
+│   ├── AuthNavbar.tsx         # Nav with auth state + theme toggle
+│   ├── Footer.tsx
+│   ├── ItineraryEditor.tsx    # Day/activity editor
+│   ├── TripCard.tsx           # Expandable trip card
+│   └── TripWizard.tsx         # 7-step trip creation wizard
+└── lib/
+    ├── supabaseClient.ts
+    └── tripTypes.ts
+```
+
+---
+
+## Running Locally
+
+### Prerequisites
+
+- Node.js 18+
+- A [Supabase](https://supabase.com) project (free tier works)
+- An [OpenAI](https://platform.openai.com) API key
+
+### Setup
+
+```bash
+git clone https://github.com/your-username/holiday-app
+cd holiday-app
+npm install
+```
+
+Create a `.env.local` file in the project root:
+
+```env
+NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key-here
+OPENAI_API_KEY=sk-...
+```
+
+### Supabase table
+
+Run this SQL in your Supabase SQL editor to create the trips table:
+
+```sql
+create table trips (
+  id          uuid primary key default gen_random_uuid(),
+  user_id     uuid references auth.users(id) on delete cascade,
+  city        text,
+  country     text,
+  hotel_name  text,
+  hotel_address text,
+  hotel_coords  jsonb,
+  start_date  text,
+  end_date    text,
+  trip_style  text,
+  notes       text,
+  preferences jsonb,
+  itinerary   jsonb,
+  created_at  timestamptz default now(),
+  updated_at  timestamptz default now()
+);
+
+-- Enable Row Level Security
+alter table trips enable row level security;
+
+-- Users can only access their own trips
+create policy "Users manage own trips"
+  on trips for all
+  using (auth.uid() = user_id);
+```
+
+### Start the dev server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+App runs at `http://localhost:3000`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## API Endpoints
 
-## Supabase Authentication
+### Itinerary generation
 
-1. Copy `.env.example` to `.env.local`.
-2. Set `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` from your Supabase project.
-3. Run `npm run dev` and visit `/signup` or `/login`.
+| Method | Endpoint | Description |
+|---|---|---|
+| `POST` | `/api/itinerary` | Generate an AI itinerary for a trip |
 
-## Trip Creation and AI Itineraries
+Requires an `Authorization: Bearer <token>` header (Supabase session token).
 
-- Visit `/trips/new` to launch the guided trip creation wizard.
-- The app stores trips locally and attempts to save to Supabase if the `trips` table exists.
-- To enable AI-based itinerary generation, set `OPENAI_API_KEY` in `.env.local`.
-- The itinerary endpoint will fallback to a smart local itinerary if OpenAI is not configured.
+**Request body**
+```json
+{
+  "trip": {
+    "city": "Tokyo",
+    "country": "Japan",
+    "startDate": "2025-09-01",
+    "endDate": "2025-09-07",
+    "hotelName": "Park Hyatt Tokyo",
+    "preferences": ["Food", "Culture"],
+    "tripStyle": "Luxury",
+    "notes": "Love rooftop bars and hidden local spots"
+  }
+}
+```
 
-## Learn More
+### Destination images
 
-To learn more about Next.js, take a look at the following resources:
+| Method | Endpoint | Description |
+|---|---|---|
+| `GET` | `/api/destination-image?city=Tokyo&country=Japan` | Returns a Wikipedia photo URL for any city |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Deployment
 
-## Deploy on Vercel
+The app deploys to **Vercel** in one click. See the [deployment guide](https://nextjs.org/docs/app/getting-started/deploying) for details.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Environment variables (Vercel)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+| Variable | Description |
+|---|---|
+| `NEXT_PUBLIC_SUPABASE_URL` | Your Supabase project URL |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Your Supabase anon key |
+| `OPENAI_API_KEY` | Your OpenAI API key |
+
+### Supabase auth config
+
+In **Supabase → Authentication → URL Configuration**, set:
+
+- **Site URL** → `https://your-app.vercel.app`
+- **Redirect URLs** → `https://your-app.vercel.app/**`

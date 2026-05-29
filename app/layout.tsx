@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import AuthNavbar from "@/components/AuthNavbar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -29,21 +30,11 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col">
         <header className="site-header">
-          <a href="/" className="brand">
+          <a href="/" className="brand cursor-pointer">
             Holiday Planner
           </a>
 
-          <nav className="site-nav">
-            <a href="/" className="nav-link">
-              Home
-            </a>
-            <a href="/signup" className="nav-link">
-              Sign up
-            </a>
-            <a href="/login" className="nav-link">
-              Login
-            </a>
-          </nav>
+          <AuthNavbar />
         </header>
 
         {children}

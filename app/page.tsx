@@ -1,3 +1,8 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { supabase } from "@/lib/supabaseClient";
+
 const slides = [
   "https://images.unsplash.com/photo-1539768942893-daf53e448371?q=80&w=1171&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
   "https://images.unsplash.com/photo-1493558103817-58b2924bce98?auto=format&fit=crop&w=1200&q=80",
@@ -12,6 +17,46 @@ const slides = [
 ];
 
 export default function Home() {
+  const [userName, setUserName] = useState<string | null>(null);
+
+  useEffect(() => {
+    let mounted = true;
+
+    const loadUser = async () => {
+      const { data } = await supabase.auth.getSession();
+      if (!mounted) return;
+      const user = data.session?.user;
+      if (!user) {
+        setUserName(null);
+        return;
+      }
+      setUserName(
+        (user.user_metadata as { full_name?: string })?.full_name ?? user.email ?? null
+      );
+    };
+
+    loadUser();
+
+    const { data: authListener } = supabase.auth.onAuthStateChange(
+      (_event, session) => {
+        if (!mounted) return;
+        const user = session?.user;
+        setUserName(
+          user
+            ? (user.user_metadata as { full_name?: string })?.full_name ??
+                user.email ??
+                null
+            : null
+        );
+      }
+    );
+
+    return () => {
+      mounted = false;
+      authListener.subscription?.unsubscribe();
+    };
+  }, []);
+
   return (
     <main className="hero">
       <div className="hero__slider">
@@ -28,19 +73,27 @@ export default function Home() {
 
       <div className="hero__content">
         <span className="hero__eyebrow">Travel made effortless</span>
-        <h1>Holiday Planner</h1>
+        <h1>{userName ? `Welcome back, ${userName}` : "Holiday Planner"}</h1>
         <p>
           Plan your next trip with ease: discover fresh destinations, organize every detail,
           and move from inspiration to itinerary in one beautifully simple place.
         </p>
 
         <div className="hero__actions">
-          <a href="/login" className="button button--primary">
-            Login
-          </a>
-          <a href="/signup" className="button button--secondary">
-            Sign up
-          </a>
+          {userName ? (
+            <a href="/trips" className="button button--primary cursor-pointer">
+              View Your Trips
+            </a>
+          ) : (
+            <>
+              <a href="/login" className="button button--primary cursor-pointer">
+                Login
+              </a>
+              <a href="/signup" className="button button--secondary cursor-pointer">
+                Sign up
+              </a>
+            </>
+          )}
         </div>
       </div>
     </main>

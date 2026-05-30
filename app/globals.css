@@ -411,8 +411,22 @@ button.nav-link {
   padding: 1rem 1.2rem;
 }
 
-.auth-footer {
-  margin-top: 1.6rem;
+.auth-message {
+  margin-top: 0.5rem;
+  padding: 0.75rem 1rem;
+  border-radius: 14px;
+  font-size: 0.9rem;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text-secondary);
+}
+
+.auth-message--error {
+  background: rgba(255, 70, 50, 0.1);
+  border: 1px solid rgba(255, 70, 50, 0.25);
+  color: #ff9080;
+}
+
+.auth-footer {  margin-top: 1.6rem;
   text-align: center;
   color: rgba(245, 247, 255, 0.72);
 }
